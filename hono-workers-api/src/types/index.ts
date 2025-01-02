@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 export interface ClipRequest {
   url?: string;
   id?: string;

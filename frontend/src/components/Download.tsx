@@ -1,12 +1,10 @@
 "use client";
 
-import { PostBodySchema } from "@/schemas/PostBody";
 import Download from "@/server/API";
 import { useState } from "react";
 
 export default function DownloadComponent() {
   const [link, setLink] = useState<string>("");
-  const [id, setId] = useState<string>("");
   const [downloadLink, setDownloadLink] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -25,16 +23,16 @@ export default function DownloadComponent() {
     document.body.removeChild(link);
   };
 
-  const handleDownload = async (value: string) => {
-    const body = id ? { id: value } : { url: value };
-
-    if (!PostBodySchema.safeParse(body).success) return;
+  const handleDownload = async (link: string) => {
+    if (!link) return;
 
     try {
       setLoading(true);
-      const data = await Download(body);
-      if (!data) return;
+      const data = await Download({
+        url: link,
+      });
 
+      if (!data) return;
       setDownloadLink(data.src);
     } catch (e) {
       console.error(e);
@@ -43,25 +41,16 @@ export default function DownloadComponent() {
     }
   };
 
-  const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!PostBodySchema.safeParse({ url: e.target.value }).success) {
-      setId(e.target.value);
-      return;
-    }
-
-    setLink(e.target.value);
-  };
-
   return (
     <div className="flex flex-col items-center">
       <input
         className="absolute bottom-72 rounded-md bg-neutral-900/80 px-4 py-2 text-white outline-none"
-        placeholder="Link / ID"
+        placeholder="Clip URL"
         style={{
           width: "calc(35% - 2rem)",
           textAlign: "left",
         }}
-        onChange={handleLinkChange}
+        onChange={(e) => setLink(e.target.value)}
       />
       <button
         className="absolute bottom-56 overflow-hidden rounded-2xl border border-hidden bg-neutral-900/80 px-4 py-2 font-semibold transition-all duration-300 ease-in-out"
@@ -71,24 +60,13 @@ export default function DownloadComponent() {
       </button>
       {loading && (
         <div className="absolute bottom-32">
-          <div className="border-custom-main-second h-20 w-20 animate-spin rounded-full border-b-2 border-t-2"></div>
+          <div className="h-20 w-20 animate-spin rounded-full border-b-2 border-t-2 border-custom-main-second"></div>
         </div>
       )}
 
-      {/* {!loading && downloadLink && (
-        <a
-          href={downloadLink}
-          className="hover:text-custom-main-second absolute bottom-40 font-semibold underline transition-colors duration-300 ease-in-out"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          Download
-        </a>
-      )} */}
-
       {!loading && downloadLink && (
         <button
-          className="hover:text-custom-main-second absolute bottom-40 font-semibold underline transition-colors duration-300 ease-in-out"
+          className="absolute bottom-40 font-semibold underline transition-colors duration-300 ease-in-out hover:text-custom-main-second"
           onClick={() => downloadVideo(downloadLink)}
         >
           Download

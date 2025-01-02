@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 export const PostBodySchema = z.object({
-  url: z.string().url().optional(),
-  id: z.string().optional(),
+  url: z.string().url(),
 });
 
 export type PostBodyType = z.infer<typeof PostBodySchema>;

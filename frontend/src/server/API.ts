@@ -8,15 +8,12 @@ export default async function Download(body: PostBodyType) {
   try {
     if (!PostBodySchema.safeParse(body)) return;
 
-    const urlOrId = body.url ? "url" : "id";
-    const value = body.url ?? body.id;
-
     const res = await fetch(`${env.API_URL}/api/clip`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ [urlOrId]: value }),
+      body: JSON.stringify({ url: body.url }),
     });
 
     const data = (await res.json()) as Response;
