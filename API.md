@@ -25,5 +25,3 @@ curl -X POST \
   "reasoning": "<REASON FOR ERROR>"   *IF INVALID
 }
 ```
-
-###### By Tyson3101

@@ -1,0 +1,22 @@
+{
+  "name": "hono-workers-api",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "bun build ./src/index.ts --outfile=dist/index.js --minify",
+    "deploy": "wrangler publish"
+  },
+  "dependencies": {
+    "hono": "^3.12.12",
+    "cross-fetch": "^3.2.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "wrangler": "^3.99.0"
+  },
+  "engines": {
+    "node": ">=14.x"
+  }
+}
