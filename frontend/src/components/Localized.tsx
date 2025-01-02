@@ -13,7 +13,7 @@ const LocalizedMessage: React.FC = () => {
   }, []);
 
   return (
-    <h1 className="to-custom-main from-custom-main-first to-custom-main-second absolute bg-gradient-to-r bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-[3rem]">
+    <h1 className="to-custom-main absolute bg-gradient-to-r from-custom-main-first to-custom-main-second bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-[3rem]">
       <ReactTyped strings={[message]} typeSpeed={50} />
     </h1>
   );
@@ -28,7 +28,7 @@ const LocalizedAuthor: React.FC = () => {
   }, []);
 
   return (
-    <p className="from-custom-main-first to-custom-main-second bg-gradient-to-r bg-clip-text font-semibold text-transparent">
+    <p className="bg-gradient-to-r from-custom-main-first to-custom-main-second bg-clip-text font-semibold text-transparent">
       {author}{" "}
       <a className="underline" href="https://github.com/xvht" target="_blank">
         @xvht

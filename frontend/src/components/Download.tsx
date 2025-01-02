@@ -1,6 +1,6 @@
 "use client";
 
-import Download from "@/server/API";
+import GetURL from "@/server/API";
 import { useState } from "react";
 
 export default function DownloadComponent() {
@@ -11,25 +11,22 @@ export default function DownloadComponent() {
   const downloadVideo = async (url: string): Promise<void> => {
     if (!url) return;
 
-    const data = await fetch(url);
-    const blobLink = window.URL.createObjectURL(await data.blob());
     const link = document.createElement("a");
-
-    link.href = blobLink;
-    link.setAttribute("download", url.replace(/.*\//, ""));
+    link.href = url;
+    link.setAttribute("download", url.replace(/[^a-zA-Z0-9]/g, ""));
 
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const handleDownload = async (link: string) => {
+  const handleDownload = async (url: string) => {
     if (!link) return;
 
     try {
       setLoading(true);
-      const data = await Download({
-        url: link,
+      const data = await GetURL({
+        url,
       });
 
       if (!data) return;

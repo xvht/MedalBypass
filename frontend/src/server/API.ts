@@ -4,7 +4,7 @@ import { env } from "@/env";
 import { type Response } from "@/types/Download";
 import { PostBodySchema, type PostBodyType } from "@/schemas/PostBody";
 
-export default async function Download(body: PostBodyType) {
+export default async function GetURL(body: PostBodyType) {
   try {
     if (!PostBodySchema.safeParse(body)) return;
 
