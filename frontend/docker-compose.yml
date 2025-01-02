@@ -7,4 +7,4 @@ services:
       - .env
     container_name: bypass-frontend
     ports:
-      - "7700:7700"
+      - "8800:8800"
