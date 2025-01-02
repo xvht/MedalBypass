@@ -11,13 +11,31 @@ export default function DownloadComponent() {
   const downloadVideo = async (url: string): Promise<void> => {
     if (!url) return;
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", url.replace(/[^a-zA-Z0-9]/g, ""));
+    const downloadUrl = `/api/download?url=${encodeURIComponent(url)}`;
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const response = await fetch(downloadUrl);
+    if (!response.ok) {
+      console.error("Failed to download video:", response.statusText);
+      return;
+    }
+
+    const contentDisposition = response.headers.get("Content-Disposition");
+    const fileName = contentDisposition
+      ? contentDisposition.split("filename=")[1]?.replace(/"/g, "")
+      : "video.mp4";
+
+    const blob = await response.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = fileName!;
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(blobUrl);
   };
 
   const handleDownload = async (url: string) => {
@@ -48,6 +66,7 @@ export default function DownloadComponent() {
           textAlign: "left",
         }}
         onChange={(e) => setLink(e.target.value)}
+        disabled={loading}
       />
       <button
         className="absolute bottom-56 overflow-hidden rounded-2xl border border-hidden bg-neutral-900/80 px-4 py-2 font-semibold transition-all duration-300 ease-in-out"
