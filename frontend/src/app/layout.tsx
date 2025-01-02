@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Shorten a URL",
+  title: "Medal Downloader",
   description: "Made with 💜",
 };
 
