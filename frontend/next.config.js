@@ -22,14 +22,6 @@ const config = {
       ],
     },
   },
-  async rewrites() {
-    return [
-      {
-        source: "/x/:path",
-        destination: `${process.env.API_URL}/:path`,
-      },
-    ];
-  },
 };
 
 export default config;
