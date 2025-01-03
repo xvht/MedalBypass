@@ -1,10 +1,15 @@
 "use client";
 
 import GetURL from "@/server/API";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function DownloadComponent() {
-  const [link, setLink] = useState<string>("");
+  const [link, setLink] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("link");
+    }
+    return "";
+  });
   const [downloadLink, setDownloadLink] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -56,6 +61,10 @@ export default function DownloadComponent() {
     }
   };
 
+  useEffect(() => {
+    setDownloadLink("");
+  }, [link]);
+
   return (
     <div className="flex flex-col items-center">
       <input
@@ -74,6 +83,7 @@ export default function DownloadComponent() {
       >
         Submit
       </button>
+
       {loading && (
         <div className="absolute bottom-32">
           <div className="h-20 w-20 animate-spin rounded-full border-b-2 border-t-2 border-custom-main-second"></div>
