@@ -1,23 +1,21 @@
 "use client";
 
-import GetURL from "@/server/API";
+import getURL from "@/server/API";
 import { useEffect, useState } from "react";
 
 export default function DownloadComponent() {
-  const [link, setLink] = useState<string>(() => {
+  const [link, setLink] = useState<string>("");
+  useEffect(() => {
     if (typeof window !== "undefined") {
       sessionStorage.removeItem("link");
     }
-    return "";
-  });
+  }, []);
+
   const [downloadLink, setDownloadLink] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const downloadVideo = async (url: string): Promise<void> => {
-    if (!url) return;
-
     const downloadUrl = `/api/download?url=${encodeURIComponent(url)}`;
-
     const response = await fetch(downloadUrl);
     if (!response.ok) {
       console.error("Failed to download video:", response.statusText);
@@ -25,9 +23,13 @@ export default function DownloadComponent() {
     }
 
     const contentDisposition = response.headers.get("Content-Disposition");
-    const fileName = contentDisposition
-      ? contentDisposition.split("filename=")[1]?.replace(/"/g, "")
-      : "video.mp4";
+    let fileName = "video.mp4";
+    if (contentDisposition?.includes("filename=")) {
+      const match = contentDisposition.split("filename=")[1];
+      if (match) {
+        fileName = match.replace(/"/g, "");
+      }
+    }
 
     const blob = await response.blob();
     const blobUrl = window.URL.createObjectURL(blob);
@@ -40,15 +42,15 @@ export default function DownloadComponent() {
     a.click();
 
     document.body.removeChild(a);
-    window.URL.revokeObjectURL(blobUrl);
   };
 
   const handleDownload = async (url: string) => {
     if (!link) return;
+    if (!url) return;
 
     try {
       setLoading(true);
-      const data = await GetURL({
+      const data = await getURL({
         url,
       });
 
@@ -60,26 +62,27 @@ export default function DownloadComponent() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     setDownloadLink("");
   }, [link]);
-
   return (
     <div className="flex flex-col items-center">
       <input
         className="absolute bottom-72 rounded-md bg-neutral-900/80 px-4 py-2 text-white outline-none"
-        placeholder="Clip URL"
         style={{
           width: "calc(35% - 2rem)",
           textAlign: "left",
         }}
+        placeholder="Clip URL"
         onChange={(e) => setLink(e.target.value)}
         disabled={loading}
       />
       <button
         className="absolute bottom-56 overflow-hidden rounded-2xl border border-hidden bg-neutral-900/80 px-4 py-2 font-semibold transition-all duration-300 ease-in-out"
-        onClick={async () => await handleDownload(link)}
+        onClick={async (e) => {
+          e.preventDefault();
+          await handleDownload(link);
+        }}
       >
         Submit
       </button>
