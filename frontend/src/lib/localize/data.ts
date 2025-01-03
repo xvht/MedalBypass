@@ -1,15 +1,9 @@
-interface Language {
+export interface iLanguage {
   text: string;
   author: string;
 }
 
-export const getLanguage = () => {
-  const userLang = navigator.language ?? "en";
-  const langCode = userLang.split("-")[0] ?? "en";
-  return languages[langCode] ?? languages.en;
-};
-
-const languages: Record<string, Language> = {
+export const Languages: Record<string, iLanguage> = {
   en: { text: "Download a Medal clip", author: "Made with 💜 by " },
   ja: { text: "Medalクリップをダウンロード", author: "作成者 " },
   de: { text: "Medal-Clip herunterladen", author: "Erstellt von " },

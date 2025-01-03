@@ -1,6 +1,6 @@
 "use client";
 
-import { getLanguage } from "@/lib/languages";
+import { getLanguage } from "@/lib/localize";
 import { useEffect, useState } from "react";
 import { ReactTyped } from "react-typed";
 
