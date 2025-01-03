@@ -6,7 +6,7 @@ import { PostBodySchema, type PostBodyType } from "@/schemas/PostBody";
 
 export default async function GetURL(body: PostBodyType) {
   try {
-    if (!PostBodySchema.safeParse(body)) return;
+    if (!PostBodySchema.safeParse(body).success) return;
 
     const res = await fetch(`${env.API_URL}/api/clip`, {
       method: "POST",
