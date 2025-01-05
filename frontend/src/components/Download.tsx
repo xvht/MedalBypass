@@ -15,33 +15,41 @@ export default function DownloadComponent() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const downloadVideo = async (url: string): Promise<void> => {
-    const downloadUrl = `/api/download?url=${encodeURIComponent(url)}`;
-    const response = await fetch(downloadUrl);
-    if (!response.ok) {
-      console.error("Failed to download video:", response.statusText);
-      return;
-    }
+    setLoading(true);
 
-    const contentDisposition = response.headers.get("Content-Disposition");
-    let fileName = "video.mp4";
-    if (contentDisposition?.includes("filename=")) {
-      const match = contentDisposition.split("filename=")[1];
-      if (match) {
-        fileName = match.replace(/"/g, "");
+    try {
+      const downloadUrl = `/api/download?url=${encodeURIComponent(url)}`;
+      const response = await fetch(downloadUrl);
+      if (!response.ok) {
+        console.error("Failed to download video:", response.statusText);
+        return;
       }
+
+      const contentDisposition = response.headers.get("Content-Disposition");
+      let fileName = "video.mp4";
+      if (contentDisposition?.includes("filename=")) {
+        const match = contentDisposition.split("filename=")[1];
+        if (match) {
+          fileName = match.replace(/"/g, "");
+        }
+      }
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = fileName!;
+
+      document.body.appendChild(a);
+      a.click();
+
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error("Error downloading video:", error);
+    } finally {
+      setLoading(false);
     }
-
-    const blob = await response.blob();
-    const blobUrl = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = blobUrl;
-    a.download = fileName!;
-
-    document.body.appendChild(a);
-    a.click();
-
-    document.body.removeChild(a);
   };
 
   const handleDownload = async (url: string) => {
