@@ -1,5 +1,7 @@
 import { type NextRequest } from "next/server";
 
+export const runtime = "edge";
+
 const allowedDomains = ["medal.tv", "cdn.medal.tv"];
 
 export async function GET(request: NextRequest) {
