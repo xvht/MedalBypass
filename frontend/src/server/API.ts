@@ -1,8 +1,8 @@
 "use server";
 
 import { env } from "@/env";
-import { type Response } from "@/types/Download";
 import { PostBodySchema, type PostBodyType } from "@/schemas/PostBody";
+import { type Response } from "@/types/Download";
 
 export default async function getURL(body: PostBodyType) {
   try {
@@ -13,6 +13,7 @@ export default async function getURL(body: PostBodyType) {
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-store",
       body: JSON.stringify({ url: body.url }),
     });
 
