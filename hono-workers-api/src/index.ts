@@ -8,7 +8,11 @@ const app = new Hono();
 
 app.use("*", cors());
 
-app.get("/api/clip", async (c) => {
+app.get("/v1/health", (c) => {
+  return c.json({ error: false, code: 200, data: "API is healthy" });
+});
+
+app.get("/v1/api/clip", async (c) => {
   const url = c.req.query("url") || c.req.query("id");
   if (!url) {
     return c.json<ClipResponse>(
@@ -23,7 +27,7 @@ app.get("/api/clip", async (c) => {
   return await handleClipRequest(url, c);
 });
 
-app.post("/api/clip", async (c) => {
+app.post("/v1/api/clip", async (c) => {
   const body = await c.req.json();
   const url = body.url || body.id;
   return await handleClipRequest(url, c);
