@@ -8,7 +8,7 @@ export default async function getURL(body: PostBodyType) {
   try {
     if (!PostBodySchema.safeParse(body).success) return;
 
-    const res = await fetch(`${env.API_URL}/api/clip`, {
+    const res = await fetch(`${env.API_URL}/v1/api/clip`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
